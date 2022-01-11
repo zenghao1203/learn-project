@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>装饰器模式</title>
+</head>
+<style>
+  #modal {
+      height: 200px;
+      width: 200px;
+      line-height: 200px;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid black;
+      text-align: center;
+  }
+</style>
+<body>
+  <button id='open'>打开弹框</button>
+  <button id='close'>关闭弹框</button>
+</body>
+</html>
+<script>
+  const Modal = (function() {
+    let modal = null
+    return function() {
+      if(!modal){
+        modal = document.createElement('div')
+        modal.innerHTML = '我是全局唯一modal'
+        modal.id = 'modal'
+        modal.style.display = 'none'
+        document.body.appendChild(modal)
+      }
+      return modal
+    }
+  })()
+
+  // 点击打开按钮展示模态框
+  document.getElementById('open').addEventListener('click', function() {
+    openModal()
+    changeButtonStatus()
+  })
+  
+  // 点击关闭按钮隐藏模态框
+  document.getElementById('close').addEventListener('click', function() {
+    const modal = new Modal()
+    if(modal) {
+        modal.style.display = 'none'
+    }
+  })
+
+  // 将展示 Modal 的逻辑封装
+  function openModal() {
+    const modal = new Modal()
+    modal.style.display = 'block'
+  }
+
+  // 按钮文案逻辑修改
+  function changeButtonText() {
+    const btn = document.getElementById('open')
+    btn.innerText = '快去登录'
+  }
+
+  // 按钮置灰逻辑
+  function disableButton() {
+    const btn = document.getElementById('open')
+    btn.setAttribute('disabled', true)
+  }
+
+  function changeButtonStatus() {
+    changeButtonText()
+    disableButton()
+  }
+
+</script>
